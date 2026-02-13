@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>val</title>
+
+    <style>
+        /* Basic styling – you can change these! */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #bc8db1;
+            color: #333;
+        }
+        
+        :root {
+          --ok-bg: #ecfdf5;
+          --ok-border: #34d399;
+          --ok-text: #065f46;
+
+          --err-bg: #fef2f2;
+          --err-border: #fca5a5;
+          --err-text: #7f1d1d;
+        }
+
+
+        h1 {
+            color: #2f1860;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+    fieldset { max-width: 560px; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1rem 1.25rem; background: #fafafa; }
+    legend { font-weight: 700; }
+    .option { display: flex; align-items: center; gap: .5rem; margin: .4rem 0; }
+    .subtle { color: #6b7280; font-size: .95rem; margin-top: .5rem; }
+    .note { color: #6b7280; font-size: .95rem; margin-top: .5rem; }
+    .msg { margin-top: 1rem; padding: .75rem 1rem; border-radius: 10px; border: 1px solid transparent; display: none; }
+    .msg.ok { background: var(--ok-bg); border-color: var(--ok-border); color: var(--ok-text); }
+    .msg.err { background: var(--err-bg); border-color: var(--err-border); color: var(--err-text); }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Pick best response</h1>
+
+        <fieldset>
+            <legend>Would you do me the honour of accepting my application to be your nerdy Valentine? </legend>
+
+            <label class="option">
+            <input type="checkbox" name="topping" value="cheese" data-key="cheese">
+            No
+            </label>
+
+            <label class="option">
+            <input type="checkbox" name="topping" value="pepperoni" data-key="pepperoni">
+            Maybe
+            </label>
+
+            <label class="option">
+            <input type="checkbox" name="topping" value="pineapple" data-key="pineapple">
+            Yes
+            </label>
+
+            <p class="note">can only choose one :o</p>
+        </fieldset>
+
+       <!-- Where we’ll print a message for a particular selection -->
+  <div id="message" class="msg" aria-live="polite" style="display:none;"></div>
+
+  <script>
+    // CONFIG: set which key is "special" and the message to show
+    const SPECIAL_KEY = 'pineapple';
+    const SPECIAL_MESSAGE = 'hehehehehehehehe staawwwp i am glad hihi';
+
+    
+    const checkboxes = Array.from(document.querySelectorAll('input[type="checkbox"][name="topping"]'));
+    const msg = document.getElementById('message');
+
+    function showMessage(type, text) {
+      msg.className = 'msg ' + (type === 'ok' ? 'ok' : 'err');
+      msg.textContent = text;
+      msg.style.display = 'block';
+    }
+
+    function hideMessage() {
+      msg.textContent = '';
+      msg.style.display = 'none';
+      msg.className = 'msg';
+    }
+
+
+   
+    checkboxes.forEach(cb => {
+      cb.addEventListener('change', (e) => {
+        // Enforce single-select
+        if (e.target.checked) {
+          checkboxes.forEach(other => { if (other !== e.target) other.checked = false; });
+
+          const key = e.target.dataset.key;
+          if (key === SPECIAL_KEY) {
+            showMessage('ok', 'hehehehehehehehe staawwwp you literally think im so cool hihi okay text me now i will be excited to hear btw great great arms');
+          } else {
+            showMessage('err', "something went wrong...you sure? i'm like super tall...");
+          }
+        } else {
+          // If they uncheck it, clear everything
+          const anyChecked = checkboxes.find(x => x.checked);
+          if (!anyChecked) hideMessage();
+        }
+      });
+    });
+  </script>
+
+
+
+      
+    </div>
+</body>
+</html>

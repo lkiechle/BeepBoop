@@ -1,12 +1,142 @@
 <!DOCTYPE html>
-<html>
-    <body>
-        <h1>HTML Basics from a Psych Student</h1>
-        <p>Dearest ma'am, <br> &emsp;please believe me that this entire thing took 7 lines of code and should be nowhere near impressive &lt;3</p> 
-        
-        <p>You don't even need to download HTML, you can just start doing it:</p>
-        <p style="color:blueviolet; "><b>Click on F12</b> [granted only on laptop]</p> 
-        <p> &emsp;2 panes open, select the element you want to edit in the left one, and then in the right one, you can just add something like "color: blueviolet;" inside "element.style{<b>here</b>}" it in your browser!</p>
-    </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HTML Basics: mobile device compatible this time</title>
 
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background-color: #fafafa;
+      color: #333;
+    }
+    h1 { color: #393e53; }
+    p { font-size: 1.1rem; line-height: 1.5; }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 20px 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    /* 🆕 Add these so "hidden/fade/show" actually work */
+    .panel { margin-top: 1rem; }
+    .hidden { display: none; }
+
+    .fade { opacity: 0; transition: opacity 180ms ease; }
+    .fade.show { opacity: 1; }
+
+    /* Optional button styles */
+    .btn {
+      display: inline-block;
+      padding: 0.6rem 1rem;
+      border: 1px solid #cfd4dc;
+      border-radius: 10px;
+      background: #f3f6fb;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      color: inherit;
+    }
+    .btn:hover { background: #e7eef9; }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>HTML Basics: mobile device compatible this time</h1>
+    <p>Hi there, thank you for your click! This is a second try at trying to be cool and getting technology to work hehe</p>
+
+    <h2>Some HTML Fun Facts:</h2>
+    <p>Don't worry it's not that many!</p>
+    <ol>
+      <li>HTML is actually technically not a programming language!</li>
+      <li>It was invented in 1993</li>
+      <li>If you are still reading this, that is very cute</li>
+      <li>The 'div' tag is one of the most popular tags</li>
+      <li>That is literally all the fun facts I found..</li>
+      <li>nice arms hihi</li>
+      <li>still readingggg?</li>
+      <li>okay won't waste more time, click this to learn more!</li>
+    </ol>
+
+    <!-- Step 1 -->
+    <button id="step1Btn" class="btn" aria-expanded="false" aria-controls="panel1">
+      Click me
+    </button>
+
+    <!-- Starts hidden -->
+    <div id="panel1" class="panel hidden fade" role="region" aria-labelledby="step1Btn">
+      <p>oh wait...hm..keep going</p>
+
+      <!-- Step 2 -->
+      <button id="step2Btn" class="btn" aria-expanded="false" aria-controls="step3Wrap">
+        click here
+      </button>
+
+      <!-- Step 3 (hidden until step 2 is clicked) -->
+      <div id="step3Wrap" class="hidden fade" style="margin-top: 0.75rem;">
+        <p>brav :)</p>
+
+        <!-- Final link -->
+        <a href="val.html" class="btn">last one, promise</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const step1Btn = document.getElementById('step1Btn');
+    const panel1 = document.getElementById('panel1');
+
+    const step2Btn = document.getElementById('step2Btn');
+    const step3Wrap = document.getElementById('step3Wrap'); // ✅ match the HTML id
+
+    function reveal(el) {
+      el.classList.remove('hidden');
+      // allow the browser to apply display change before adding .show (for fade)
+      requestAnimationFrame(() => el.classList.add('show'));
+    }
+
+    function hide(el) {
+      el.classList.remove('show');
+      setTimeout(() => el.classList.add('hidden'), 180); // match transition duration
+    }
+
+    // Step 1 toggles the panel
+    step1Btn.addEventListener('click', () => {
+      const isHidden = panel1.classList.contains('hidden');
+      if (isHidden) {
+        reveal(panel1);
+        step1Btn.setAttribute('aria-expanded', 'true');
+        step1Btn.textContent = 'Hide';
+      } else {
+        hide(panel1);
+        step1Btn.setAttribute('aria-expanded', 'false');
+        step1Btn.textContent = 'Click me';
+        // Reset Step 2 content if open
+        if (!step3Wrap.classList.contains('hidden')) hide(step3Wrap);
+        step2Btn.setAttribute('aria-expanded', 'false');
+        step2Btn.textContent = 'click here';
+      }
+    });
+
+    // Step 2 shows paragraph + last button together
+    step2Btn.addEventListener('click', () => {
+      const isHidden = step3Wrap.classList.contains('hidden');
+      if (isHidden) {
+        reveal(step3Wrap);
+        step2Btn.setAttribute('aria-expanded', 'true');
+        step2Btn.textContent = 'hide the last bit';
+      } else {
+        hide(step3Wrap);
+        step2Btn.setAttribute('aria-expanded', 'false');
+        step2Btn.textContent = 'click here';
+      }
+    });
+  </script>
+</body>
 </html>
